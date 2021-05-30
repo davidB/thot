@@ -1,3 +1,6 @@
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//rust:image.bzl", "rust_image")
+
 package(default_visibility = ["//visibility:public"])
 
 filegroup(
@@ -40,3 +43,43 @@ genrule(
 #     popd
 #     """,
 # )
+
+container_image(
+    name = "app",
+    # References container_pull from WORKSPACE
+    # base = "@cc_image_base//image"
+    base = "@rust_base//image",
+    entrypoint = [
+        "/thot",
+    ],
+    # cmd = ["thot"],
+    files = [":actix-wrapper"],
+    ports = ["8080"],
+    stamp = True,
+)
+
+# rust_binary(
+#     name = "rust_binary",
+#     srcs = [":sources"],
+#     edition = "2018",
+#     deps = [
+#         "//web/actix-wrapper/cargo:actix_rt",
+#         "//web/actix-wrapper/cargo:actix_service",
+#         "//web/actix-wrapper/cargo:actix_web",
+#         "//web/actix-wrapper/cargo:env_logger",
+#         "//web/actix-wrapper/cargo:serde",
+#     ],
+# )
+
+rust_image(
+    name = "rust_image",
+    srcs = [":sources"],
+    edition = "2018",
+    deps = [
+        "//web/actix-wrapper/cargo:actix_rt",
+        "//web/actix-wrapper/cargo:actix_service",
+        "//web/actix-wrapper/cargo:actix_web",
+        "//web/actix-wrapper/cargo:env_logger",
+        "//web/actix-wrapper/cargo:serde",
+    ],
+)
