@@ -9,10 +9,10 @@ An experimentation to serve a ML Model (in TorchScript) via an http api (in rust
 nix-shell
 
 # build the service
-bazel build \\...
+bazel build //...
 
 # serve the model via an http service made with actix-web
-bazel run \\web\actix-wrapper
+bazel run //web/actix-wrapper
 ```
 
 ## HTTP api
