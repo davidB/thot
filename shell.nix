@@ -4,17 +4,26 @@
 
 pkgs.mkShell {               # mkShell is a helper function
   name="dev-environment";    # that requires a name
-  buildInputs =  with pkgs; [
+  # nativeBuildInputs is usually what you want -- tools you need to dev or to run
+  nativeBuildInputs =  with pkgs; [
+    # buildah
+    dive
+    # docker-slim # not well packaged so it crashes
     curl
-  	rustc
+    # rustc
     cargo
     # python38Full
     bazelisk
     bazel-buildtools
-    starship
+    #starship
   ];
+  # buildInputs is for dependencies you'd need "at run time",
+  # were you to to use nix-build not nix-shell and build whatever you were working on
+  # buildInputs = [];
+  
   # bash to run when you enter the shell
   shellHook = ''
-    source <(starship init bash --print-full-init)
+    export DOCKER_BUILDKIT=1
+    # source <(starship init bash --print-full-init)
   '';
 }
